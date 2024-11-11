@@ -2,12 +2,12 @@ package aed;
 
 public class Traslado {
     
-    int id;
-    int origen;
-    int destino;
-    int gananciaNeta;
-    int timestamp;
-    int[] handle; //handle[0] es la posición en HeapRedituable y handle[1] es la posición en HeapAntiguos
+    private int id;
+    private int origen;
+    private int destino;
+    private int gananciaNeta;
+    private int timestamp;
+    private int[] handler; //handle[0] es la posición en HeapRedituable y handle[1] es la posición en HeapAntiguos
 
     public Traslado(int id, int origen, int destino, int gananciaNeta, int timestamp){
         this.id = id;
@@ -15,7 +15,7 @@ public class Traslado {
         this.destino = destino;
         this.gananciaNeta = gananciaNeta;
         this.timestamp = timestamp;
-        this.handle = new int[2];
+        this.handler = new int[2];
     }
 
     public int obtenerId(){
@@ -38,15 +38,19 @@ public class Traslado {
         return timestamp; //Agregar test para ver si se cambia por pasar por referencia (no debería porque es tipo primitivo)
     }
 
-    public int[] obtenerHandle(){
+    public int[] obtenerHandler(){
         int[] copia = new int[2];
-        copia[0] = handle[0];
-        copia[1] = handle[1];
+        copia[0] = handler[0];
+        copia[1] = handler[1];
         return copia;
     }
 
-    public void modificarHandle(int posRedituable, int posAntiguos){
-        handle[0] = posRedituable;
-        handle[1] = posAntiguos;
+    public void modificarHandlerRedituable(int posRedituable){
+        handler[0] = posRedituable;
     }
+
+    public void modificarHandlerAntiguo(int posAntiguo){
+        handler[1] = posAntiguo;
+    }
+    
 }

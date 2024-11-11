@@ -3,13 +3,13 @@ package aed;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-//Hacer interfaz heap
 public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> { //Hay que poner comparable o no?
+   //Atributos
     private ArrayList<T> elementos;
     private int size;
     private Comparator<T> comparador;
 
-    public HeapBestEffort(Comparator<T> comparador, ArrayList<T> elementos){
+    public HeapSobreArrayList(Comparator<T> comparador, ArrayList<T> elementos){
         this.comparador = comparador;
         this.elementos = elementos;
         size = elementos.size();
@@ -18,7 +18,7 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> { //H
         }
     }
 
-    public void heapify(){
+    private void heapify(){
         int posPadre = elementos.size() - 1; //Esto es O(1)?
         while (posPadre >= 0){
             bajar(posPadre);
@@ -129,8 +129,6 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> { //H
         }
     }
 
-    
-
     private int posMayorPrioridad(int pos1, int pos2){
         if (comparador.compare(elementos.get(pos1), elementos.get(pos2)) > 0){
             return pos1;
@@ -152,12 +150,12 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> { //H
             Traslado traslado2 = (Traslado) elemento2;
             
             if(comparador.getClass() == ComparadorRedituable.class){ //Esto está bien?
-                traslado1.modificarHandleRedituable(pos2);
-                traslado2.modificarHandleRedituable(pos1);
+                traslado1.modificarHandlerRedituable(pos2);
+                traslado2.modificarHandlerRedituable(pos1);
             }
             else if(comparador.getClass() == ComparadorAntiguedad.class){
-                traslado1.modificarHandleAntiguo(pos2);
-                traslado2.modificarHandleAntiguo(pos1);
+                traslado1.modificarHandlerAntiguo(pos2);
+                traslado2.modificarHandlerAntiguo(pos1);
             }
         }
     }

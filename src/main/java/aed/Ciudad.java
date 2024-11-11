@@ -1,10 +1,11 @@
 package aed;
 
 public class Ciudad {
-    int id;
-    int ganancia;
-    int perdida;
-    int superavit;
+    private int id;
+    private int ganancia;
+    private int perdida;
+    private int superavit;
+    private int handler;
 
     public Ciudad(int id){
         this.id = id;
@@ -37,11 +38,16 @@ public class Ciudad {
         perdida += valor;
     }
 
-    public void aumentarSuperavit(int valor){
-        superavit += valor;
+    public void modificarSuperavit(int valor){
+        superavit = valor;
     }
 
-    public void disminuirSuperavit(int valor){
-        superavit -= valor;
+    public int obtenerHandler(){
+        return handler;
     }
+
+    public void modificarHandler(int nuevo){
+        handler = nuevo;
+    }
+
 }

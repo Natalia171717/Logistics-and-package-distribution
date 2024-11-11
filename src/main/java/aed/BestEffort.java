@@ -3,51 +3,53 @@ package aed;
 import java.util.ArrayList;
 
 public class BestEffort {
-    Ciudad[] ciudades;
-    ArrayList<Integer> idCiudadesMayorGanancia;
-    ArrayList<Integer> idCiudadesMayorPerdida;
-    HeapBestEffort trasladosRedituables;
-    HeapBestEffort trasladosAntiguos;
-    HeapBestEffort ciudadesSuperavit;
-    int gananciaTotal;
-    int cantDespachados;
+    private Ciudad[] ciudades;
+    private ArrayList<Integer> idCiudadesMayorGanancia;
+    private ArrayList<Integer> idCiudadesMayorPerdida;
+    private HeapSobreArrayList trasladosRedituables;
+    private HeapSobreArrayList trasladosAntiguos;
+    private HeapSobreArrayList ciudadesSuperavit;
+    private int gananciaTotal; 
+    private int cantDespachados;
+
 
     public BestEffort(int cantCiudades, Traslado[] traslados){
-        // Implementar
+        // Implementar - NATI
     }
 
     public void registrarTraslados(Traslado[] traslados){
-        // Implementar
+        for (int i = 0; i < traslados.length; i++){
+            trasladosAntiguos.encolar(traslados[i]);
+	        trasladosRedituables.encolar(traslados[i]);
+        }
     }
 
     public int[] despacharMasRedituables(int n){
-        // Implementar
+        // Implementar - VICKY
         return null;
     }
 
     public int[] despacharMasAntiguos(int n){
-        // Implementar
+        // Implementar - DELFI
         return null;
     }
 
     public int ciudadConMayorSuperavit(){
-        // Implementar
-        return 0;
+        Ciudad resCiudad = (Ciudad) ciudadesSuperavit.verRaiz();
+        int res = resCiudad.obtenerId();
+        return res;
     }
 
     public ArrayList<Integer> ciudadesConMayorGanancia(){
-        // Implementar
-        return null;
+        return idCiudadesMayorGanancia;
     }
 
     public ArrayList<Integer> ciudadesConMayorPerdida(){
-        // Implementar
-        return null;
+        return idCiudadesMayorPerdida;
     }
 
     public int gananciaPromedioPorTraslado(){
-        // Implementar
-        return 0;
+        return (gananciaTotal / cantDespachados);
     }
-    
 }
+
