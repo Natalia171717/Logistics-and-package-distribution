@@ -12,6 +12,7 @@ public class Ciudad {
         ganancia = 0;
         perdida = 0;
         superavit = 0;
+        handler = id;
     }
 
     public int obtenerId(){
