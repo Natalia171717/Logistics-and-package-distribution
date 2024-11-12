@@ -26,7 +26,72 @@ public class BestEffort {
 
     public int[] despacharMasRedituables(int n){
         // Implementar - VICKY
-        return null;
+        int[] res = new int[n];
+
+        int i = 0;
+        Traslado traslado;
+        int origen;
+        int destino;
+        int ganancia;
+
+        //Despacho los n traslados más redituables y realizo las actualizaciones correspondientes
+        while(i < n && i < trasladosRedituables.obtenerTamano()){ //¿Esto funciona en vez de hacer 2 for, uno por si n se pasa del tamaño del heap y otro por si no?
+            traslado = trasladosRedituables.desencolarTraslado();
+            res[i] = traslado.obtenerId();
+            origen  = traslado.obtenerOrigen();
+            destino = traslado.obtenerDestino();
+            ganancia = traslado.obtenerGananciaNeta();
+
+            //Aumento ganancias y pérdidas correspondientes
+            ciudades[origen].aumentarGanancia(ganancia);
+            ciudades[destino].aumentarPerdida(ganancia);
+
+            //Actualizo heap de superavit en dos pasos, primero para origen y luego para destino
+            ciudadesSuperavit.cambiarPrioridadCiudad(ciudades[origen], ciudades[origen].obtenerSuperavit() + ganancia);
+            ciudadesSuperavit.cambiarPrioridadCiudad(ciudades[destino], ciudades[destino].obtenerSuperavit() - ganancia);
+
+            //Actualizo arrays idCiudadesMayorGanancia e idCiudadesMayorPerdida
+            actualizarCiudadesMayorGanancia(origen, traslado);
+            actualizarCiudadesMayorPerdida(destino, traslado);
+
+            cantDespachados++;
+            gananciaTotal += ganancia;
+            
+            i++;
+        }
+        return res;
+    }
+
+    private void actualizarCiudadesMayorGanancia(int origen, Traslado traslado){
+        if (!idCiudadesMayorGanancia.isEmpty()){
+            if (ciudades[origen].obtenerGanancia() > ciudades[idCiudadesMayorGanancia.get(0)].obtenerGanancia()){
+                ArrayList<Integer> nuevo = new ArrayList<Integer>();
+                nuevo.add(traslado.obtenerId());
+                idCiudadesMayorGanancia = nuevo;
+            }
+            else if (ciudades[origen].obtenerGanancia() == ciudades[idCiudadesMayorGanancia.get(0)].obtenerGanancia()){
+                idCiudadesMayorGanancia.add(origen);
+            }
+        }
+        else{
+            idCiudadesMayorGanancia.add(origen);
+        }
+    }
+
+    private void actualizarCiudadesMayorPerdida(int destino, Traslado traslado){
+        if (!idCiudadesMayorPerdida.isEmpty()){
+            if (ciudades[destino].obtenerPerdida() > ciudades[idCiudadesMayorPerdida.get(0)].obtenerPerdida()){
+                ArrayList<Integer> nuevo = new ArrayList<Integer>();
+                nuevo.add(traslado.obtenerId());
+                idCiudadesMayorPerdida = nuevo;
+            }
+            else if (ciudades[destino].obtenerPerdida() == ciudades[idCiudadesMayorPerdida.get(0)].obtenerPerdida()){
+                idCiudadesMayorPerdida.add(destino);
+            }
+        }
+        else{
+            idCiudadesMayorPerdida.add(destino);
+        }
     }
 
     public int[] despacharMasAntiguos(int n){
