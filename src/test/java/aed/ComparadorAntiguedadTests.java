@@ -8,37 +8,34 @@ import org.junit.jupiter.api.Test;
 public class ComparadorAntiguedadTests {
 
     private ComparadorAntiguedad comparador;
-    private Traslado trasladoReciente;
-    private Traslado trasladoAntiguo;
-    private Traslado trasladoIgual1;
-    private Traslado trasladoIgual2;
+    private Traslado trasladoAntiguo1;
+    private Traslado trasladoMasReciente;
+    private Traslado trasladoAntiguo2;
 
     @BeforeEach
-    public void setUp() {
+    public void init() {
         comparador = new ComparadorAntiguedad();
 
-        // Creamos traslados con diferentes timestamps
-        trasladoReciente = new Traslado(0,1,4,5000,2023);  // Timestamp más reciente
-        trasladoAntiguo = new Traslado(0,1,4,5000,2021);   // Timestamp más antiguo
-        trasladoIgual1 = new Traslado(0,1,4,5000,2022);    // Timestamp igual entre dos traslados
-        trasladoIgual2 = new Traslado(0,1,4,5000,2022);
+        trasladoAntiguo1 = new Traslado(0,1,4,5000,2021); // Antiguo
+        trasladoMasReciente = new Traslado(0,1,4,5000,2024); // Más reciente
+        trasladoAntiguo2 = new Traslado(1,1,4,5000,2021); // Misma antiguedad que el trasladoAntiguo1
     }
 
     @Test
-    public void testCompare_TrasladoRecienteEsMayor() {
-        int resultado = comparador.compare(trasladoReciente, trasladoAntiguo);
-        assertTrue(resultado < 0, "El traslado más reciente debería ser menor en orden inverso de antigüedad");
+    public void testCompararTrasladoMenorTimestampMayorPrioridad() {
+        int resultado = comparador.compare(trasladoAntiguo1, trasladoMasReciente);
+        assertTrue(resultado > 0, "El traslado con menor timestamp debería tener mayor prioridad.");
     }
 
     @Test
-    public void testCompare_TrasladoAntiguoEsMenor() {
-        int resultado = comparador.compare(trasladoAntiguo, trasladoReciente);
-        assertTrue(resultado > 0, "El traslado más antiguo debería ser mayor en orden inverso de antigüedad");
+    public void testCompararTrasladoMayorTimestampMenorPrioridad() {
+        int resultado = comparador.compare(trasladoMasReciente, trasladoAntiguo1);
+        assertTrue(resultado < 0, "El traslado con mayor timestamp debería tener menor prioridad.");
     }
 
     @Test
-    public void testCompare_TrasladosIguales() {
-        int resultado = comparador.compare(trasladoIgual1, trasladoIgual2);
-        assertEquals(0, resultado, "Los traslados con el mismo timestamp deberían ser considerados iguales");
+    public void testCompararMismoTimestamp() {
+        // Dos traslados con el mismo timestamp deberían ser iguales en prioridad
+        assertEquals(0, comparador.compare(trasladoAntiguo1, trasladoAntiguo2), "Traslados con el mismo timestamp deberían tener la misma prioridad.");
     }
 }

@@ -7,51 +7,40 @@ import org.junit.jupiter.api.Test;
 public class ComparadorSuperavitTests {
 
     private ComparadorSuperavit comparador;
-    private Ciudad ciudadMayorSuperavit;
-    private Ciudad ciudadMenorSuperavit;
-    private Ciudad ciudadIgualSuperavitMenorId;
-    private Ciudad ciudadIgualSuperavitMayorId;
+    private Ciudad ciudad1;
+    private Ciudad ciudad2;
+    private Ciudad ciudad3;
 
     @BeforeEach
-    public void setUp() {
+    public void init() {
         comparador = new ComparadorSuperavit();
 
-        // Creamos ciudades con diferentes IDs y superávits
-        ciudadMayorSuperavit = new Ciudad(1);
-        ciudadMayorSuperavit.modificarSuperavit(5000);
+        // Creamos algunas ciudades con diferentes superávits e IDs
+        ciudad1 = new Ciudad(1);
+        ciudad1.modificarSuperavit(3000);
 
-        ciudadMenorSuperavit = new Ciudad(2);
-        ciudadMenorSuperavit.modificarSuperavit(2000);
+        ciudad2 = new Ciudad(2);
+        ciudad2.modificarSuperavit(5000);
 
-        ciudadIgualSuperavitMenorId = new Ciudad(3);
-        ciudadIgualSuperavitMenorId.modificarSuperavit(3000);
-
-        ciudadIgualSuperavitMayorId = new Ciudad(4);
-        ciudadIgualSuperavitMayorId.modificarSuperavit(3000);
+        ciudad3 = new Ciudad(3);
+        ciudad3.modificarSuperavit(5000); // mismo superávit que ciudad2, pero con un id mayor
     }
 
     @Test
     public void testCompare_MayorSuperavitEsMayor() {
-        int resultado = comparador.compare(ciudadMayorSuperavit, ciudadMenorSuperavit);
-        assertTrue(resultado > 0, "La ciudad con mayor superávit debería ser considerada mayor");
+        int resultado = comparador.compare(ciudad2, ciudad1);
+        assertTrue(resultado > 0, "Caso arg1 > arg2, la ciudad con el mayor superávit debería ser considerada mayor");
     }
 
     @Test
     public void testCompare_MenorSuperavitEsMenor() {
-        int resultado = comparador.compare(ciudadMenorSuperavit, ciudadMayorSuperavit);
-        assertTrue(resultado < 0, "La ciudad con menor superávit debería ser considerada menor");
+        int resultado = comparador.compare(ciudad1, ciudad2);
+        assertTrue(resultado < 0, "Caso arg1 < arg2, la ciudad con el menor superávit debería ser considerada menor");
     }
 
     @Test
-    public void testCompare_IgualSuperavit_MenorIdEsMenor() {
-        int resultado = comparador.compare(ciudadIgualSuperavitMenorId, ciudadIgualSuperavitMayorId);
-        assertTrue(resultado < 0, "Si el superávit es igual, la ciudad con menor ID debería ser considerada menor (arg1 < arg2)");
+    public void testCompare_IgualSuperavit_MenorIdEsMayor() {
+        int resultado = comparador.compare(ciudad2, ciudad3);
+        assertTrue(resultado < 0, "Caso arg1 < arg2, el superávit es igual, la ciudad con menor ID debería ser considerada mayor");
     }
-
-    @Test
-    public void testCompare_IgualSuperavit_MayorIdEsMayor() {
-        int resultado = comparador.compare(ciudadIgualSuperavitMayorId, ciudadIgualSuperavitMenorId);
-        assertTrue(resultado > 0, "Si el superávit es igual, la ciudad con mayor ID debería ser considerada mayor (arg1 > arg2)");
-    }
-
 }
