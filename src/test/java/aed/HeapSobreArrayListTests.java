@@ -95,7 +95,7 @@ public class HeapSobreArrayListTests {
         Ciudad ciudad = ciudades.get(0); // Ciudad con ID 1, superávit 4000
         heapSuperavit.cambiarPrioridadCiudad(ciudad, 6000); // Modificamos el superávit a 6000 para que sea la de mayor prioridad
         assertEquals(6000, heapSuperavit.verRaiz().obtenerSuperavit(), "La ciudad con el mayor superávit debería estar en la raíz después de cambiar prioridad");
-        assertEquals(ciudad.obtenerId(), heapSuperavit.verRaiz().obtenerId(), "En caso de empate de superávit, la ciudad con mayor superávit y menor ID debería tener la mayor prioridad por lo que debería estar en la raíz"); 
+        assertEquals(ciudad.obtenerId(), heapSuperavit.verRaiz().obtenerId(), "En caso de empate de superávit, la ciudad con menor ID debería tener la mayor prioridad por lo que debería estar en la raíz"); 
     }
 
     @Test
