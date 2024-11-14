@@ -41,6 +41,6 @@ public class ComparadorSuperavitTests {
     @Test
     public void testCompare_IgualSuperavit_MenorIdEsMayor() {
         int resultado = comparador.compare(ciudad2, ciudad3);
-        assertTrue(resultado < 0, "Caso arg1 < arg2, el superávit es igual, la ciudad con menor ID debería ser considerada mayor");
+        assertTrue(resultado > 0, "Caso arg1 > arg2, el superávit es igual, la ciudad con menor ID debería ser considerada mayor");
     }
 }

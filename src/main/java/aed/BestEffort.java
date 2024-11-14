@@ -17,7 +17,11 @@ public class BestEffort {
 
 
     public BestEffort(int cantCiudades, Traslado[] traslados){
-
+        
+        comparadorRedituable = new ComparadorRedituable();
+        comparadorAntiguedad = new ComparadorAntiguedad();
+        comparadorSuperavit = new ComparadorSuperavit();
+    
         idCiudadesMayorGanancia = new ArrayList<Integer>(); //O(1)
         idCiudadesMayorPerdida = new ArrayList<Integer>();  //O(1)
         

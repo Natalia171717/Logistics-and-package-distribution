@@ -43,6 +43,26 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> { //H
     public void encolar(T elemento){
         elementos.add(elemento);
         size++;
+        int pos = size-1;
+        
+        //Inicializo handler traslado
+        if (elementos.get(0).getClass() == Traslado.class){
+            Traslado traslado = (Traslado) elemento;
+
+            if(comparador.getClass() == ComparadorRedituable.class){ //Esto está bien?
+                traslado.modificarHandlerRedituable(pos);
+            }
+            else if(comparador.getClass() == ComparadorAntiguedad.class){
+                traslado.modificarHandlerAntiguo(pos);
+            }
+        }
+        //Inicializo handler ciudad
+        else if(elementos.get(0).getClass() == Ciudad.class){
+            Ciudad ciudad = (Ciudad) elemento;
+
+            ciudad.modificarHandler(pos);
+        }
+
         subir(size-1); //elemento está en la ultima posicion, es decir size-1
     }
 
