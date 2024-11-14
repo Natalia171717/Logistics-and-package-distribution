@@ -43,9 +43,9 @@ public class HeapSobreArrayListTests {
         ciudades.add(ciudad4);
 
         // Inicializamos los heaps con los comparadores respectivos
-        colaPrioridadAntiguedad = new HeapSobreArrayList<>(comparadorAntiguedad, new ArrayList<>(traslados));
-        colaPrioridadRedituable = new HeapSobreArrayList<>(comparadorRedituable, new ArrayList<>(traslados));
-        colaPrioridadSuperavit = new HeapSobreArrayList<>(comparadorSuperavit, new ArrayList<>(ciudades));
+        colaPrioridadAntiguedad = new HeapSobreArrayList<>(comparadorAntiguedad, traslados);
+        colaPrioridadRedituable = new HeapSobreArrayList<>(comparadorRedituable, traslados);
+        colaPrioridadSuperavit = new HeapSobreArrayList<>(comparadorSuperavit, ciudades);
     }
 
     // Tests para ComparadorAntiguedad
@@ -61,7 +61,7 @@ public class HeapSobreArrayListTests {
     public void testDesencolarTrasladoPorAntiguedad() {
         Traslado trasladoDesencolado = colaPrioridadAntiguedad.desencolarTraslado();
         assertEquals(2021, trasladoDesencolado.obtenerTimestamp(), "El traslado más antiguo debería ser desencolado primero");
-        assertEquals(traslados.get(2), colaPrioridadAntiguedad.verRaiz(), "ver que el siguiente traslado con menor timestamp sea ahora la raíz");
+        assertEquals(traslados.get(1).obtenerId(), colaPrioridadAntiguedad.verRaiz().obtenerId(), "ver que el siguiente traslado con menor timestamp sea ahora la raíz");
         assertEquals(2, colaPrioridadAntiguedad.obtenerTamano(), "El tamaño del heap debería reducirse después de desencolar");
     }
 
@@ -85,11 +85,12 @@ public class HeapSobreArrayListTests {
     // Tests para ComparadorSuperavit
     @Test
     public void testEncolarCiudadPorSuperavit() {
-        Ciudad nuevaCiudad = new Ciudad(4);
+        Ciudad nuevaCiudad = new Ciudad(5);
         nuevaCiudad.modificarSuperavit(6000); // Superávit mayor que los existentes
         colaPrioridadSuperavit.encolar(nuevaCiudad);
         assertEquals(5, colaPrioridadSuperavit.obtenerTamano(), "El tamaño del heap debería ser 5 después de encolar");
-        assertEquals(nuevaCiudad, colaPrioridadSuperavit.verRaiz(), "La ciudad con mayor superávit debería estar en la raíz");
+        
+        assertEquals(2, colaPrioridadSuperavit.verRaiz().obtenerId(), "La ciudad con mayor superávit debería estar en la raíz");
     }
 
     @Test

@@ -54,13 +54,6 @@ probar jerarquía de traslados con igual ganancia para ver qué hace con los ids
     @Test
     public void testNestaEnRango() {
         assertArrayEquals(new int[]{6, 5, 4, 1}, sistema.despacharMasRedituables(4), "Despacho los 4 más redituables. Espero obtener la siguiente lista de ids: [6, 5, 4, 1]");
-        //vuelvo a encolar los traslados para poder seguir testeando con todo
-        Traslado[] despachados = new Traslado[4];
-        despachados[0] = new Traslado(6, 8, 6, 3500, 2018);
-        despachados[1] = new Traslado(5, 4, 6, 2900, 2019);
-        despachados[2] = new Traslado(4, 3, 2, 1800, 2020);
-        despachados[3] = new Traslado(1, 1, 2, 1000, 2023);
-        sistema.registrarTraslados(despachados);
     }
 
     @Test
@@ -70,15 +63,12 @@ probar jerarquía de traslados con igual ganancia para ver qué hace con los ids
 
     @Test
     public void testNesMayorALongitudTraslados() {
-        assertArrayEquals(new int[]{6, 5, 4, 1, 2, 9, 10, 7, 3, 8}, sistema.despacharMasRedituables(89), "Despacho toda la lista porque la cantidad que me piden es mayor. Espero obtener la siguiente lista de ids: [6, 5, 4, 1, 2, 9, 10, 7, 3, 8]");
-        //Vuelvo a incorporarlos para próximo test
-        sistema.registrarTraslados(traslados);
+        assertArrayEquals(new int[]{6, 5, 4, 1, 2, 9, 10, 7, 3, 8}, sistema.despacharMasRedituables(89), "Despacho toda la lista porque la cantidad que me piden es mayor. Espero obtener la siguiente lista de ids: [6, 5, 4, 1, 2, 9, 10, 7, 3, 8]");;
     }
 
     @Test
     public void testNesIgualALongitudTraslados() {
         assertArrayEquals(new int[]{6, 5, 4, 1, 2, 9, 10, 7, 3, 8}, sistema.despacharMasRedituables(10), "Despacho toda la lista porque la cantidad que me piden es su longitud. Espero obtener la siguiente lista de ids: [6, 5, 4, 1, 2, 9, 10, 7, 3, 8]");
-        //No vuelvo a incorporarlos a proósito para siguiente test;
     }
 
     @Test

@@ -83,7 +83,7 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> { //H
 
         int posPadre = posPadre(posicion);
 
-        if (posMayorPrioridad(posicion, posPadre) == posicion){
+        if (posicion != 0 && posMayorPrioridad(posicion, posPadre) == posicion){
             subir(posicion);
         }
         else{
@@ -164,7 +164,7 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> { //H
         elementos.set(pos1, elemento2);
         elementos.set(pos2, elemento1);
 
-        //Modifico handles correspondientes si estoy swapeando traslados
+        //Modifico handlers correspondientes si estoy swapeando traslados
         if (elementos.get(0).getClass() == Traslado.class){
             Traslado traslado1 = (Traslado) elemento1;
             Traslado traslado2 = (Traslado) elemento2;
@@ -178,7 +178,7 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> { //H
                 traslado2.modificarHandlerAntiguo(pos1);
             }
         }
-        //Modifico handles correspondientes si estoy swapeando ciudades
+        //Modifico handlers correspondientes si estoy swapeando ciudades
         else if(elementos.get(0).getClass() == Ciudad.class){
             Ciudad ciudad1 = (Ciudad) elemento1;
             Ciudad ciudad2 = (Ciudad) elemento2;
