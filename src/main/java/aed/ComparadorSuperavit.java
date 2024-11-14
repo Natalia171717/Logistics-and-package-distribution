@@ -8,7 +8,7 @@ public class ComparadorSuperavit implements Comparator<Ciudad>{
         int id2 = c2.obtenerId();
         int comparacion = Integer.compare(c1.obtenerSuperavit(), c2.obtenerSuperavit());
         if (comparacion == 0){
-            if (id1 > id2){
+            if (id1 < id2){
                 comparacion = 1;
             }
             else{

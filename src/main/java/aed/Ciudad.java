@@ -15,6 +15,21 @@ public class Ciudad {
         handler = id;
     }
 
+    @Override
+    public boolean equals(Object otra) {
+        boolean otraEsNull = (otra == null);
+        boolean claseDistinta = otra.getClass() != this.getClass();
+        if (otraEsNull || claseDistinta) {
+            return false;
+        }
+        Ciudad otraCiudad = (Ciudad) otra;
+        return (id == otraCiudad.id &&
+               ganancia == otraCiudad.ganancia &&
+               perdida == otraCiudad.perdida &&
+               superavit == otraCiudad.superavit &&
+               handler == otraCiudad.handler);
+    }
+
     public int obtenerId(){
         return id;
     }
