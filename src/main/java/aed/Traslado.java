@@ -18,6 +18,18 @@ public class Traslado {
         this.handler = new int[2];
     }
 
+    public Traslado(Traslado traslado){
+        this.id = traslado.id;
+        this.origen = traslado.origen;
+        this.destino = traslado.destino;
+        this.gananciaNeta = traslado.gananciaNeta;
+        this.timestamp = traslado.timestamp;
+        this.handler = new int[2];  //O(1) porque está acotado el tamaño del arreglo (O(2))
+        for (int i=0; i<this.handler.length; i++){  //O(1) porque está acotada la cant de iteraciones (2 iteraciones siempre)
+            this.handler[i] = traslado.handler[i];
+        }
+    }
+
     @Override
     public boolean equals(Object otro) {
         boolean otroEsNull = (otro == null);

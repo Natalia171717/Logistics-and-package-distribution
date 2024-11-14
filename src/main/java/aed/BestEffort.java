@@ -6,17 +6,51 @@ public class BestEffort {
     private Ciudad[] ciudades;
     private ArrayList<Integer> idCiudadesMayorGanancia;
     private ArrayList<Integer> idCiudadesMayorPerdida;
-    private HeapSobreArrayList trasladosRedituables;
-    private HeapSobreArrayList trasladosAntiguos;
-    private HeapSobreArrayList ciudadesSuperavit;
+    private HeapSobreArrayList<Traslado> trasladosRedituables;
+    private HeapSobreArrayList<Traslado> trasladosAntiguos;
+    private HeapSobreArrayList<Ciudad> ciudadesSuperavit;
     private int gananciaTotal; 
     private int cantDespachados;
+    private ComparadorRedituable comparadorRedituable;
+    private ComparadorAntiguedad comparadorAntiguedad;
+    private ComparadorSuperavit comparadorSuperavit; // son O(1) los comparator?
 
 
     public BestEffort(int cantCiudades, Traslado[] traslados){
-        // Implementar - NATI
-    }
 
+        idCiudadesMayorGanancia = new ArrayList<Integer>(); //O(1)
+        idCiudadesMayorPerdida = new ArrayList<Integer>();  //O(1)
+        
+        gananciaTotal = 0;   
+        cantDespachados = 0; 
+
+    //Creo un arrayList para almacenar los traslados y no tener aliasing con el arreglo recibido por parametro
+        ArrayList<Traslado> trasladosNuevo = new ArrayList<Traslado>(); //O(1)
+        Traslado traslado;
+        for (int i=0; i<traslados.length; i++){     //O(|T|)
+            traslado = new Traslado(traslados[i]);  //O(1)
+            trasladosNuevo.add(traslado);           //O(1)
+        }//Todo este bloque es de complejidad O(|T|), ya que se hacen T veces operaciones de complejidad O(1) 
+
+        trasladosRedituables = new HeapSobreArrayList<Traslado>(comparadorRedituable, trasladosNuevo); //O(|T|) porque hace heapify
+        trasladosAntiguos = new HeapSobreArrayList<Traslado>(comparadorAntiguedad, trasladosNuevo);    //O(|T|) porque hace heapify
+
+        ciudades = new Ciudad[cantCiudades];    //O(|C|)
+        //Creo ArrayList para inicializar mi heap de ciudadesSuperavit
+        ArrayList<Ciudad> ciudadesLista = new ArrayList<Ciudad>();  //O(1)
+
+        for (int i=0; i<cantCiudades; i++){ //O(|C|)
+            Ciudad nueva = new Ciudad(i);   //O(1)
+            ciudadesLista.add(nueva);       //O(1)
+            nueva.modificarHandler(i); //O(1)  //Inicializo el handler que se usará en el heap
+            ciudades[i] = nueva;            //O(1)
+        }//Todo este bloque es de complejidad O(|C|), ya que se hacen C veces operaciones de complejidad O(1) 
+
+        ciudadesSuperavit = new HeapSobreArrayList<Ciudad>(comparadorSuperavit, ciudadesLista); //O(1) porque para tipo ciudad no hace heapify
+
+    }//nuevoSistema (constructor BestEffort) es de complejidad O(|T|+|T|+|T|+|C|+|C|)= O(|T|+|C|)
+
+    
     public void registrarTraslados(Traslado[] traslados){
         for (int i = 0; i < traslados.length; i++){
             trasladosAntiguos.encolar(traslados[i]);

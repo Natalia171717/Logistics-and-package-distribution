@@ -5,9 +5,9 @@ public class Ciudad {
     private int ganancia;
     private int perdida;
     private int superavit;
-    private int handler;
+    private int handler;    //handler para el heap ciudadesSuperavit
 
-    public Ciudad(int id){
+    public Ciudad(int id){  //O(1)
         this.id = id;
         ganancia = 0;
         perdida = 0;

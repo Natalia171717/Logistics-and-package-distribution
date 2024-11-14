@@ -12,9 +12,9 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> { //H
     public HeapSobreArrayList(Comparator<T> comparador, ArrayList<T> elementos){
         this.comparador = comparador;
         this.elementos = elementos;
-        size = elementos.size();
+        size = elementos.size();    //O(1)?
         if (elementos.get(0).getClass() == Traslado.class){
-            heapify(); //por qué está en amarillo esto?
+            heapify();  //O(size)  //por qué está en amarillo esto?
         }
     }
 
@@ -157,6 +157,14 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> { //H
                 traslado1.modificarHandlerAntiguo(pos2);
                 traslado2.modificarHandlerAntiguo(pos1);
             }
+        }
+        //Modifico handles correspondientes si estoy swapeando ciudades
+        else if(elementos.get(0).getClass() == Ciudad.class){
+            Ciudad ciudad1 = (Ciudad) elemento1;
+            Ciudad ciudad2 = (Ciudad) elemento2;
+
+            ciudad1.modificarHandler(pos2);
+            ciudad2.modificarHandler(pos1);
         }
     }
 }
