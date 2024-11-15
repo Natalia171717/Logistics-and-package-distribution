@@ -28,16 +28,21 @@ public class BestEffort {
         gananciaTotal = 0;   
         cantDespachados = 0; 
 
-    //Creo un arrayList para almacenar los traslados y no tener aliasing con el arreglo recibido por parametro
-        ArrayList<Traslado> trasladosNuevo = new ArrayList<Traslado>(); //O(1)
-        Traslado traslado;
-        for (int i=0; i<traslados.length; i++){     //O(|T|)
-            traslado = new Traslado(traslados[i]);  //O(1)
-            trasladosNuevo.add(traslado);           //O(1)
-        }//Todo este bloque es de complejidad O(|T|), ya que se hacen T veces operaciones de complejidad O(1) 
+    //Creo dos arrayList para almacenar los traslados y no tener aliasing con el arreglo recibido por parametro ni entre los dos heaps
+        ArrayList<Traslado> listaRedituables = new ArrayList<Traslado>(); //O(1)
+        ArrayList<Traslado> listaAntiguos = new ArrayList<Traslado>(); //O(1)
+        Traslado trasladoRedituable;
+        Traslado trasladoAntiguo;
 
-        trasladosRedituables = new HeapSobreArrayList<Traslado>(comparadorRedituable, trasladosNuevo); //O(|T|) porque hace heapify
-        trasladosAntiguos = new HeapSobreArrayList<Traslado>(comparadorAntiguedad, trasladosNuevo);    //O(|T|) porque hace heapify
+        for (int i=0; i<traslados.length; i++){     //O(|T|)
+            trasladoRedituable = new Traslado(traslados[i]);  //O(1)
+            trasladoAntiguo = new Traslado(traslados[i]);  //O(1)
+            listaAntiguos.add(trasladoAntiguo);           //O(1)
+            listaRedituables.add(trasladoRedituable);           //O(1)
+        }//Todo este bloque es de complejidad O(|T|), ya que se hacen T veces operaciones de complejidad O(1)
+
+        trasladosRedituables = new HeapSobreArrayList<Traslado>(comparadorRedituable, listaRedituables); //O(|T|) porque hace heapify
+        trasladosAntiguos = new HeapSobreArrayList<Traslado>(comparadorAntiguedad, listaAntiguos);    //O(|T|) porque hace heapify
 
         ciudades = new Ciudad[cantCiudades];    //O(|C|)
         //Creo ArrayList para inicializar mi heap de ciudadesSuperavit
@@ -63,42 +68,50 @@ public class BestEffort {
     }
 
     public int[] despacharMasRedituables(int n){
-        // Implementar - VICKY
-        int[] res = new int[n];
+        int tamaño = trasladosRedituables.obtenerTamano();
+        int[] res;
+        if(tamaño<=0){
+            res = new int[0];
+        }
+        else{
+            int i = 0;
+            Traslado traslado;
+            int origen;
+            int destino;
+            int ganancia;
+            if (n>tamaño){
+                n=tamaño;
+            }
+            res = new int[n];
 
-        int i = 0;
-        Traslado traslado;
-        int origen;
-        int destino;
-        int ganancia;
+            //Despacho los n traslados más redituables y realizo las actualizaciones correspondientes
+            //El while se ejecuta n veces
+            while(i < n){ //¿Esto funciona en vez de hacer 2 for, uno por si n se pasa del tamaño del heap y otro por si no?
+                traslado = trasladosRedituables.desencolarTraslado(); //Esto es O(log(|T|))
 
-        //Despacho los n traslados más redituables y realizo las actualizaciones correspondientes
-        //El while se ejecuta n veces
-        while(i < n && i < trasladosRedituables.obtenerTamano()){ //¿Esto funciona en vez de hacer 2 for, uno por si n se pasa del tamaño del heap y otro por si no?
-            traslado = trasladosRedituables.desencolarTraslado(); //Esto es O(log(|T|))
+                //Todo esto es O(1)
+                res[i] = traslado.obtenerId();
+                origen  = traslado.obtenerOrigen();
+                destino = traslado.obtenerDestino();
+                ganancia = traslado.obtenerGananciaNeta();
 
-            //Todo esto es O(1)
-            res[i] = traslado.obtenerId();
-            origen  = traslado.obtenerOrigen();
-            destino = traslado.obtenerDestino();
-            ganancia = traslado.obtenerGananciaNeta();
+                //Actualizo arrays idCiudadesMayorGanancia e idCiudadesMayorPerdida primero para evitar agregar repetidos
+                actualizarCiudadesMayorGanancia(origen, ciudades[origen].obtenerGanancia() + ganancia); //O(1)
+                actualizarCiudadesMayorPerdida(destino, ciudades[destino].obtenerPerdida() + ganancia); //O(1)
 
-            //Actualizo arrays idCiudadesMayorGanancia e idCiudadesMayorPerdida primero para evitar agregar repetidos
-            actualizarCiudadesMayorGanancia(origen, ciudades[origen].obtenerGanancia() + ganancia); //O(1)
-            actualizarCiudadesMayorPerdida(destino, ciudades[destino].obtenerPerdida() - ganancia); //O(1)
+                //Aumento ganancias y pérdidas correspondientes
+                ciudades[origen].aumentarGanancia(ganancia); //O(1)
+                ciudades[destino].aumentarPerdida(ganancia); //O(1)
 
-            //Aumento ganancias y pérdidas correspondientes
-            ciudades[origen].aumentarGanancia(ganancia); //O(1)
-            ciudades[destino].aumentarPerdida(ganancia); //O(1)
+                //Actualizo heap de superavit en dos pasos, primero para origen y luego para destino
+                ciudadesSuperavit.cambiarPrioridadCiudad(ciudades[origen], ciudades[origen].obtenerSuperavit() + ganancia); //O(log |C|)
+                ciudadesSuperavit.cambiarPrioridadCiudad(ciudades[destino], ciudades[destino].obtenerSuperavit() - ganancia); //O(log |C|)
 
-            //Actualizo heap de superavit en dos pasos, primero para origen y luego para destino
-            ciudadesSuperavit.cambiarPrioridadCiudad(ciudades[origen], ciudades[origen].obtenerSuperavit() + ganancia); //O(log |C|)
-            ciudadesSuperavit.cambiarPrioridadCiudad(ciudades[destino], ciudades[destino].obtenerSuperavit() - ganancia); //O(log |C|)
-
-            cantDespachados++;
-            gananciaTotal += ganancia;
-            
-            i++;
+                cantDespachados++;
+                gananciaTotal += ganancia;
+                
+                i++;
+            }
         }
         //Complejidad total: O(n (log(|C|) + log(|T|)))
         return res;

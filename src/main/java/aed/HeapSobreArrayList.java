@@ -111,11 +111,11 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> { //H
     }
 
     private int posHijoDerecho(int posPadre){
-        return 2 * posPadre + 1;
+        return 2 * posPadre + 2;
     }
 
     private int posHijoIzquierdo(int posPadre){
-        return 2 * posPadre + 2;
+        return 2 * posPadre + 1;
     }
 
     private void bajar(int posicion){

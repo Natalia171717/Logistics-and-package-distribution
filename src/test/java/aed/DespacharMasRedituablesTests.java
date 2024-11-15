@@ -40,9 +40,9 @@ probar jerarquía de traslados con igual ganancia para ver qué hace con los ids
         traslados[2] = new Traslado(3, 3, 2, 200, 2021);
         traslados[3] = new Traslado(4, 3, 2, 1800, 2020);
         traslados[4] = new Traslado(5, 4, 6, 2900, 2019);
-        traslados[5] = new Traslado(6, 8, 6, 3500, 2018); //Mayor ganancia
+        traslados[5] = new Traslado(6, 5, 6, 3500, 2018); //Mayor ganancia
         traslados[6] = new Traslado(7, 3, 5, 650, 2017);
-        traslados[7] = new Traslado(8, 1, 8, 2, 2016); //Menor ganancia
+        traslados[7] = new Traslado(8, 1, 0, 2, 2016); //Menor ganancia
         traslados[8] = new Traslado(9, 7, 1, 925, 2015); //Igual ganancia que el siguiente
         traslados[9] = new Traslado(10, 5, 6, 925, 2014); //Igual ganancia que el anterior
 
@@ -73,6 +73,7 @@ probar jerarquía de traslados con igual ganancia para ver qué hace con los ids
 
     @Test
     public void testTrasladosVacios() {
+        sistema.despacharMasRedituables(10);
         assertArrayEquals(new int[]{}, sistema.despacharMasRedituables(3), "No hay nada que despachar. Espero obtener la siguiente lista de ids: []");
     }
 }

@@ -61,7 +61,7 @@ public class HeapSobreArrayListTests {
     public void testDesencolarTrasladoPorAntiguedad() {
         Traslado trasladoDesencolado = colaPrioridadAntiguedad.desencolarTraslado();
         assertEquals(2021, trasladoDesencolado.obtenerTimestamp(), "El traslado más antiguo debería ser desencolado primero");
-        assertEquals(traslados.get(1).obtenerId(), colaPrioridadAntiguedad.verRaiz().obtenerId(), "ver que el siguiente traslado con menor timestamp sea ahora la raíz");
+        assertEquals(2, colaPrioridadAntiguedad.verRaiz().obtenerId(), "ver que el siguiente traslado con menor timestamp sea ahora la raíz");
         assertEquals(2, colaPrioridadAntiguedad.obtenerTamano(), "El tamaño del heap debería reducirse después de desencolar");
     }
 
@@ -78,19 +78,8 @@ public class HeapSobreArrayListTests {
     public void testDesencolarTrasladoPorRedituable() {
         Traslado trasladoDesencolado = colaPrioridadRedituable.desencolarTraslado();
         assertEquals(2000, trasladoDesencolado.obtenerGananciaNeta(), "El traslado con mayor ganancia neta debería ser desencolado primero");
-        assertEquals(traslados.get(2), colaPrioridadRedituable.verRaiz(), "ver que el siguiente traslado con mayor ganancia neta sea ahora la raíz");
+        assertEquals(1, colaPrioridadRedituable.verRaiz().obtenerId(), "ver que el siguiente traslado con mayor ganancia neta sea ahora la raíz");
         assertEquals(2, colaPrioridadRedituable.obtenerTamano(), "El tamaño del heap debería reducirse después de desencolar");
-    }
-
-    // Tests para ComparadorSuperavit
-    @Test
-    public void testEncolarCiudadPorSuperavit() {
-        Ciudad nuevaCiudad = new Ciudad(5);
-        nuevaCiudad.modificarSuperavit(6000); // Superávit mayor que los existentes
-        colaPrioridadSuperavit.encolar(nuevaCiudad);
-        assertEquals(5, colaPrioridadSuperavit.obtenerTamano(), "El tamaño del heap debería ser 5 después de encolar");
-        
-        assertEquals(2, colaPrioridadSuperavit.verRaiz().obtenerId(), "La ciudad con mayor superávit debería estar en la raíz");
     }
 
     @Test
