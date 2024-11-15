@@ -14,7 +14,7 @@ public class BestEffort {
     private ComparadorRedituable comparadorRedituable;
     private ComparadorAntiguedad comparadorAntiguedad;
     private ComparadorSuperavit comparadorSuperavit; // son O(1) los comparator?
-
+    //preguntar funciones despachar 
 
     public BestEffort(int cantCiudades, Traslado[] traslados){
         
@@ -31,14 +31,14 @@ public class BestEffort {
     //Creo dos arrayList para almacenar los traslados y no tener aliasing con el arreglo recibido por parametro ni entre los dos heaps
         ArrayList<Traslado> listaRedituables = new ArrayList<Traslado>(); //O(1)
         ArrayList<Traslado> listaAntiguos = new ArrayList<Traslado>(); //O(1)
-        Traslado trasladoRedituable;
-        Traslado trasladoAntiguo;
+        Traslado traslado;
 
         for (int i=0; i<traslados.length; i++){     //O(|T|)
-            trasladoRedituable = new Traslado(traslados[i]);  //O(1)
-            trasladoAntiguo = new Traslado(traslados[i]);  //O(1)
-            listaAntiguos.add(trasladoAntiguo);           //O(1)
-            listaRedituables.add(trasladoRedituable);           //O(1)
+            traslado = new Traslado(traslados[i]);  //O(1)
+            traslado.modificarHandlerRedituable(i); //O(1)
+            traslado.modificarHandlerAntiguo(i);    //O(1)
+            listaAntiguos.add(traslado);           //O(1)
+            listaRedituables.add(traslado);           //O(1)
         }//Todo este bloque es de complejidad O(|T|), ya que se hacen T veces operaciones de complejidad O(1)
 
         trasladosRedituables = new HeapSobreArrayList<Traslado>(comparadorRedituable, listaRedituables); //O(|T|) porque hace heapify
@@ -61,9 +61,9 @@ public class BestEffort {
 
     
     public void registrarTraslados(Traslado[] traslados){
-        for (int i = 0; i < traslados.length; i++){
-            trasladosAntiguos.encolar(traslados[i]);
-	        trasladosRedituables.encolar(traslados[i]);
+        for (int i = 0; i < traslados.length; i++){ //O(|traslados|(log|T|))
+            trasladosAntiguos.encolar(traslados[i]); //O(log|T|)
+	        trasladosRedituables.encolar(traslados[i]); //O(log|T|)
         }
     }
 
@@ -88,7 +88,7 @@ public class BestEffort {
             //El while se ejecuta n veces
             while(i < n){ //¿Esto funciona en vez de hacer 2 for, uno por si n se pasa del tamaño del heap y otro por si no?
                 traslado = trasladosRedituables.desencolarTraslado(); //Esto es O(log(|T|))
-
+                trasladosAntiguos.eliminarTraslado(traslado); 
                 //Todo esto es O(1)
                 res[i] = traslado.obtenerId();
                 origen  = traslado.obtenerOrigen();
@@ -150,25 +150,56 @@ public class BestEffort {
     }
 
     public int[] despacharMasAntiguos(int n){
-        // Implementar - DELFI
-        return null;
+        if(n > trasladosAntiguos.obtenerTamano() || trasladosAntiguos.obtenerTamano()==0){ //O(1)
+            n=trasladosAntiguos.obtenerTamano();
+        }
+        int[] res= new int[n]; // creo el array donde se guardan los despachos O(1)
+        for(int i=0; i<n ; i++){ //O(n(log |T|+log|C|))
+            //despacho el traslado más antiguo y guardo los datos de las ciudades involucradas 
+            Traslado trasladoMasAntiguo = trasladosAntiguos.desencolarTraslado(); //O(log|T|)
+            Ciudad ciudadOrigen = ciudades[trasladoMasAntiguo.obtenerOrigen()]; //O(1)
+            Ciudad ciudadDestino = ciudades[trasladoMasAntiguo.obtenerDestino()]; //O(1)
+            int gananciaNeta = trasladoMasAntiguo.obtenerGananciaNeta(); //O(1)
+
+            //elimino el traslado despachado de trasladosRedituables y agrego el id a res 
+            trasladosRedituables.eliminarTraslado(trasladoMasAntiguo); //O(log |T|)
+            res[i]= trasladoMasAntiguo.obtenerId(); //O(1)
+
+            //Actualizo las estadisticas de las ciudades incolucradas en el traslado 
+            //Actualizo arrays idCiudadesMayorGanancia e idCiudadesMayorPerdida primero para evitar agregar repetidos
+            actualizarCiudadesMayorGanancia(ciudadOrigen.obtenerId(), ciudades[trasladoMasAntiguo.obtenerOrigen()].obtenerGanancia() + gananciaNeta); //O(1)
+            actualizarCiudadesMayorPerdida(ciudadDestino.obtenerId(), ciudades[trasladoMasAntiguo.obtenerDestino()].obtenerPerdida() + gananciaNeta); //O(1)
+            
+            ciudadOrigen.aumentarGanancia(gananciaNeta); //O(1)
+            ciudadDestino.aumentarPerdida(gananciaNeta); //O(1)
+
+            //Ordeno ciudadesSuperavit 
+            ciudadesSuperavit.cambiarPrioridadCiudad(ciudadDestino, ciudadDestino.obtenerGanancia()-ciudadDestino.obtenerPerdida()); //O(log|C|)
+            ciudadesSuperavit.cambiarPrioridadCiudad(ciudadOrigen, ciudadOrigen.obtenerGanancia()-ciudadOrigen.obtenerPerdida()); //O(log|C|)
+            
+            //Actualizo las estadisticas globales 
+            gananciaTotal+=gananciaNeta; //O(1)
+            cantDespachados+=1; //O(1)
+
+        }
+        return res; 
     }
 
-    public int ciudadConMayorSuperavit(){
-        Ciudad resCiudad = (Ciudad) ciudadesSuperavit.verRaiz();
-        int res = resCiudad.obtenerId();
+    public int ciudadConMayorSuperavit(){ //O(1)
+        Ciudad resCiudad = (Ciudad) ciudadesSuperavit.verRaiz(); //O(1)
+        int res = resCiudad.obtenerId(); //O(1)
         return res;
     }
 
-    public ArrayList<Integer> ciudadesConMayorGanancia(){
+    public ArrayList<Integer> ciudadesConMayorGanancia(){ //O(1)
         return idCiudadesMayorGanancia;
     }
 
-    public ArrayList<Integer> ciudadesConMayorPerdida(){
+    public ArrayList<Integer> ciudadesConMayorPerdida(){ //O(1)
         return idCiudadesMayorPerdida;
     }
 
-    public int gananciaPromedioPorTraslado(){
+    public int gananciaPromedioPorTraslado(){ //O(1)
         return (gananciaTotal / cantDespachados);
     }
 }

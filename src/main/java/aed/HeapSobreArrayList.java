@@ -14,7 +14,7 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> { //H
         this.elementos = elementos;
         size = elementos.size();    //O(1)?
         if (elementos.get(0).getClass() == Traslado.class){
-            heapify();  //O(size)  //por qué está en amarillo esto?
+            heapify();  //O(size) 
         }
     }
 
@@ -82,12 +82,13 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> { //H
         size--;
 
         int posPadre = posPadre(posicion);
-
-        if (posicion != 0 && posMayorPrioridad(posicion, posPadre) == posicion){
-            subir(posicion);
-        }
-        else{
-            bajar(posicion);
+        if (posicion!=size){
+            if (posicion != 0 && posMayorPrioridad(posicion, posPadre) == posicion){
+                subir(posicion);
+            }
+            else{
+                bajar(posicion);
+            }
         }
     }
 
