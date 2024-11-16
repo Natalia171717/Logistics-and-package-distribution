@@ -18,15 +18,15 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> {
         }
     }
 
-    private void heapify(){
+    private void heapify(){ //O(size)
         int posPadre = elementos.size() - 1;
-        while (posPadre >= 0){
-            bajar(posPadre);
+        while (posPadre >= 0){  
+            bajar(posPadre);    
             posPadre--;
         }
     }
 
-    public void cambiarPrioridadCiudad(Ciudad ciudad, int valor){
+    public void cambiarPrioridadCiudad(Ciudad ciudad, int valor){   //O(log(size)) porque buscar es O(1)
         ciudad.modificarSuperavit(valor);
 
         int posCambiar = ciudad.obtenerHandler();
@@ -36,11 +36,11 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> {
             subir(posCambiar);
         }
         else{
-            bajar(posCambiar);
+            bajar(posCambiar);  
         }
     }
 
-    public void encolar(T elemento){
+    public void encolar(T elemento){    //O(log(size))
         elementos.add(elemento);
         size++;
         int pos = size-1;
@@ -66,18 +66,18 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> {
         subir(size-1); //elemento está en la ultima posicion, es decir size-1
     }
 
-    public void eliminarTraslado(Traslado traslado){
+    public void eliminarTraslado(Traslado traslado){    //O(log(size)) porque buscar es O(1)
         int posicion;
         int posUltimo = size-1;
 
         if (comparador.getClass() == ComparadorRedituable.class){
-            posicion = traslado.obtenerHandler()[0];
+            posicion = traslado.obtenerPosicionRedituable();
         }
         else{
-            posicion = traslado.obtenerHandler()[1];
+            posicion = traslado.obtenerPosicionAntiguos();
         }
 
-        swap(posicion, posUltimo); //size-1 es la última posicion
+        swap(posicion, posUltimo); 
         elementos.remove(posUltimo);
         size--;
 
@@ -92,10 +92,10 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> {
         }
     }
 
-    public Traslado desencolarTraslado(){
+    public Traslado desencolarTraslado(){   //O(log(size))
         T raiz = verRaiz();
         Traslado res = (Traslado) raiz;
-        eliminarTraslado(res);
+        eliminarTraslado(res);  //O(log(size))
         return res;
     }
 
@@ -103,7 +103,7 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> {
         return size;
     }
 
-    public T verRaiz(){ //ver nombre
+    public T verRaiz(){ 
         return elementos.get(0);
     }
 
@@ -119,7 +119,7 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> {
         return 2 * posPadre + 1;
     }
 
-    private void bajar(int posicion){
+    private void bajar(int posicion){   //O(log(size))
         int posHijoDer = posHijoDerecho(posicion);
         int posHijoIzq = posHijoIzquierdo(posicion);
         int posHijoMayor;
@@ -139,18 +139,15 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> {
         }
     }
 
-    private void subir(int posicion){
+    private void subir(int posicion){   //O(log(size))
         int posPadre = posPadre(posicion);
         if(posicion != 0 && posMayorPrioridad(posicion, posPadre) == posicion){
             swap(posicion, posPadre);
-            subir(posPadre); //ahora la posición a subir está en la posición de su padre. 
-            //Quizá sea mejor que subir y bajar tomen como parámetro los elementos y no sus posiciones (las sacan con el handler).
-            //Para que sea más declarativo.
-            //Preguntar a Tomi
+            subir(posPadre); //ahora la posición a subir está en la posición de su padre
         }
     }
 
-    private int posMayorPrioridad(int pos1, int pos2){
+    private int posMayorPrioridad(int pos1, int pos2){  //O(1)
         if (comparador.compare(elementos.get(pos1), elementos.get(pos2)) > 0){
             return pos1;
         }
@@ -159,18 +156,18 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> {
         }
     }
 
-    private void swap(int pos1, int pos2){
+    private void swap(int pos1, int pos2){  //O(1)
         T elemento1 = elementos.get(pos1);
         T elemento2 = elementos.get(pos2);
         elementos.set(pos1, elemento2);
         elementos.set(pos2, elemento1);
 
-        //Modifico handlers correspondientes si estoy swapeando traslados
+        //Modificamos handlers correspondientes si estamos swapeando traslados
         if (elementos.get(0).getClass() == Traslado.class){
             Traslado traslado1 = (Traslado) elemento1;
             Traslado traslado2 = (Traslado) elemento2;
             
-            if(comparador.getClass() == ComparadorRedituable.class){ //Esto está bien?
+            if(comparador.getClass() == ComparadorRedituable.class){
                 traslado1.modificarHandlerRedituable(pos2);
                 traslado2.modificarHandlerRedituable(pos1);
             }
@@ -179,7 +176,7 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> {
                 traslado2.modificarHandlerAntiguo(pos1);
             }
         }
-        //Modifico handlers correspondientes si estoy swapeando ciudades
+        //Modificamos handlers correspondientes si estamos swapeando ciudades
         else if(elementos.get(0).getClass() == Ciudad.class){
             Ciudad ciudad1 = (Ciudad) elemento1;
             Ciudad ciudad2 = (Ciudad) elemento2;

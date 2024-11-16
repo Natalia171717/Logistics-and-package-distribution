@@ -5,7 +5,7 @@ public class Ciudad {
     private int ganancia;
     private int perdida;
     private int superavit;
-    private int handler;    //handler para el heap ciudadesSuperavit
+    private int handler;    //posicion en ciudadesSuperavit
 
     public Ciudad(int id){  //O(1)
         this.id = id;
@@ -16,7 +16,7 @@ public class Ciudad {
     }
 
     @Override
-    public boolean equals(Object otra) {
+    public boolean equals(Object otra) {    //Lo usamos en testing, su complejidad no afecta a la del sistema
         boolean otraEsNull = (otra == null);
         boolean claseDistinta = otra.getClass() != this.getClass();
         if (otraEsNull || claseDistinta) {

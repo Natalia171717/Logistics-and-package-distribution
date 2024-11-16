@@ -7,18 +7,18 @@ public class Traslado {
     private int destino;
     private int gananciaNeta;
     private int timestamp;
-    private int[] handler; //handle[0] es la posición en HeapRedituable y handle[1] es la posición en HeapAntiguos
+    private int[] handler; //handler[0] es la posición en trasladosRedituables y handler[1] es la posición en trasladosAntiguos
 
-    public Traslado(int id, int origen, int destino, int gananciaNeta, int timestamp){
+    public Traslado(int id, int origen, int destino, int gananciaNeta, int timestamp){//O(1)
         this.id = id;
         this.origen = origen;
         this.destino = destino;
         this.gananciaNeta = gananciaNeta;
         this.timestamp = timestamp;
-        this.handler = new int[2];
+        this.handler = new int[2]; //O(1) porque está acotado el tamaño del arreglo (O(2))
     }
 
-    public Traslado(Traslado traslado){
+    public Traslado(Traslado traslado){ //O(1)
         this.id = traslado.id;
         this.origen = traslado.origen;
         this.destino = traslado.destino;
@@ -31,7 +31,7 @@ public class Traslado {
     }
 
     @Override
-    public boolean equals(Object otro) {
+    public boolean equals(Object otro) { //Lo usamos en testing, su complejidad no afecta a la del sistema
         boolean otroEsNull = (otro == null);
         boolean claseDistinta = otro.getClass() != this.getClass();
         if (otroEsNull || claseDistinta) {
@@ -48,30 +48,31 @@ public class Traslado {
     }
 
     public int obtenerId(){
-        return id; //Agregar test para ver si se cambia por pasar por referencia (no debería porque es tipo primitivo)
+        return id; 
     }
 
     public int obtenerOrigen(){
-        return origen; //Agregar test para ver si se cambia por pasar por referencia (no debería porque es tipo primitivo)
+        return origen; 
     }
 
     public int obtenerDestino(){
-        return destino; //Agregar test para ver si se cambia por pasar por referencia (no debería porque es tipo primitivo)
+        return destino; 
     }
 
     public int obtenerGananciaNeta(){
-        return gananciaNeta; //Agregar test para ver si se cambia por pasar por referencia (no debería porque es tipo primitivo)
+        return gananciaNeta; 
     }
 
     public int obtenerTimestamp(){
-        return timestamp; //Agregar test para ver si se cambia por pasar por referencia (no debería porque es tipo primitivo)
+        return timestamp; 
     }
 
-    public int[] obtenerHandler(){
-        int[] copia = new int[2];
-        copia[0] = handler[0];
-        copia[1] = handler[1];
-        return copia;
+    public int obtenerPosicionRedituable(){
+        return handler[0];
+    }
+
+    public int obtenerPosicionAntiguos(){
+        return handler[1];
     }
 
     public void modificarHandlerRedituable(int posRedituable){
