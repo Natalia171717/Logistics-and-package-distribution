@@ -13,9 +13,9 @@ public class BestEffort {
     private int cantDespachados;
     private ComparadorRedituable comparadorRedituable;
     private ComparadorAntiguedad comparadorAntiguedad;
-    private ComparadorSuperavit comparadorSuperavit; // son O(1) los comparator?
-    //preguntar funciones despachar 
+    private ComparadorSuperavit comparadorSuperavit; 
 
+    //Observación sobre complejidades: encolar, eliminar y desencolar tienen complejidad O(log(n)). Buscar en este heap es O(1) gracias a los handlers.
     public BestEffort(int cantCiudades, Traslado[] traslados){
         
         comparadorRedituable = new ComparadorRedituable();
@@ -50,9 +50,9 @@ public class BestEffort {
 
         for (int i=0; i<cantCiudades; i++){ //O(|C|)
             Ciudad nueva = new Ciudad(i);   //O(1)
-            ciudadesLista.add(nueva);       //O(1)
+            ciudadesLista.add(nueva); 
             nueva.modificarHandler(i); //O(1)  //Inicializo el handler que se usará en el heap
-            ciudades[i] = nueva;            //O(1)
+            ciudades[i] = nueva;
         }//Todo este bloque es de complejidad O(|C|), ya que se hacen C veces operaciones de complejidad O(1) 
 
         ciudadesSuperavit = new HeapSobreArrayList<Ciudad>(comparadorSuperavit, ciudadesLista); //O(1) porque para tipo ciudad no hace heapify
@@ -62,8 +62,9 @@ public class BestEffort {
     
     public void registrarTraslados(Traslado[] traslados){
         for (int i = 0; i < traslados.length; i++){ //O(|traslados|(log|T|))
-            trasladosAntiguos.encolar(traslados[i]); //O(log|T|)
-	        trasladosRedituables.encolar(traslados[i]); //O(log|T|)
+            Traslado nuevoTraslado = new Traslado(traslados[i]);
+            trasladosAntiguos.encolar(nuevoTraslado); //O(log|T|)
+	        trasladosRedituables.encolar(nuevoTraslado); //O(log|T|)
         }
     }
 
@@ -85,8 +86,7 @@ public class BestEffort {
             res = new int[n];
 
             //Despacho los n traslados más redituables y realizo las actualizaciones correspondientes
-            //El while se ejecuta n veces
-            while(i < n){ //¿Esto funciona en vez de hacer 2 for, uno por si n se pasa del tamaño del heap y otro por si no?
+            while(i < n){
                 traslado = trasladosRedituables.desencolarTraslado(); //Esto es O(log(|T|))
                 trasladosAntiguos.eliminarTraslado(traslado); 
                 //Todo esto es O(1)
@@ -180,14 +180,14 @@ public class BestEffort {
             //Actualizo las estadisticas globales 
             gananciaTotal+=gananciaNeta; //O(1)
             cantDespachados+=1; //O(1)
-
         }
+        //Complejidad total: O(n (log(|C|) + log(|T|)))
         return res; 
     }
 
     public int ciudadConMayorSuperavit(){ //O(1)
         Ciudad resCiudad = (Ciudad) ciudadesSuperavit.verRaiz(); //O(1)
-        int res = resCiudad.obtenerId(); //O(1)
+        int res = resCiudad.obtenerId();
         return res;
     }
 

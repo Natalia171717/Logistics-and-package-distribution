@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 
 public class DespacharMasRedituablesTests {
 
-    private HeapSobreArrayList<Traslado> colaPrioridadRedituable;
-    private HeapSobreArrayList<Ciudad> colaPrioridadSuperavit;
     private ComparadorRedituable comparadorRedituable;
     private ComparadorSuperavit comparadorSuperavit;
     private Traslado[] traslados;

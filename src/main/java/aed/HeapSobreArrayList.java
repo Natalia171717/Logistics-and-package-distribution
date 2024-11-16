@@ -3,7 +3,7 @@ package aed;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> { //Hay que poner comparable o no?
+public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> {
    //Atributos
     private ArrayList<T> elementos;
     private int size;
@@ -12,14 +12,14 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> { //H
     public HeapSobreArrayList(Comparator<T> comparador, ArrayList<T> elementos){
         this.comparador = comparador;
         this.elementos = elementos;
-        size = elementos.size();    //O(1)?
-        if (elementos.get(0).getClass() == Traslado.class){
+        size = elementos.size();  
+        if (size!= 0 && elementos.get(0).getClass() == Traslado.class){
             heapify();  //O(size) 
         }
     }
 
     private void heapify(){
-        int posPadre = elementos.size() - 1; //Esto es O(1)?
+        int posPadre = elementos.size() - 1;
         while (posPadre >= 0){
             bajar(posPadre);
             posPadre--;
@@ -49,7 +49,7 @@ public class HeapSobreArrayList<T> implements ColaDePrioridadBestEffort<T> { //H
         if (elementos.get(0).getClass() == Traslado.class){
             Traslado traslado = (Traslado) elemento;
 
-            if(comparador.getClass() == ComparadorRedituable.class){ //Esto está bien?
+            if(comparador.getClass() == ComparadorRedituable.class){
                 traslado.modificarHandlerRedituable(pos);
             }
             else if(comparador.getClass() == ComparadorAntiguedad.class){
