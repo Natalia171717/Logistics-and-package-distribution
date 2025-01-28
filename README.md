@@ -1,4 +1,4 @@
-## Logistics-and-package-distribution
+## Logistics and package distribution
 
 ### About the project
 - The project was developed exclusively using JAVA.
