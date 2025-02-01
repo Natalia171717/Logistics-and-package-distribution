@@ -1,8 +1,12 @@
 ## Logistics and package distribution
 
-### About the project
-- The project was developed exclusively using JAVA.
-- The project involves a system that enables a logistics and distribution company to register and dispatch transfers, dynamically regulating the dispatch of the most profitable transfers as well as those pending delivery for an extended period, in order to prevent what is known as starvation. Additionally, the system collects statistics from the cities where the company operates.
-- To properly understand and operate the system, please consult the [documentation](enunciado.pdf). The documentation is written in Spanish.
+### Overview
+The project involves a system that enables a logistics and distribution company to register and dispatch transfers, dynamically regulating the dispatch of the most profitable transfers as well as those pending delivery for an extended period, in order to prevent what is known as starvation. Additionally, the system collects statistics from the cities where the company operates. To properly understand and operate the system, please consult the [documentation](enunciado.pdf). The documentation is written in Spanish.
+
+### Challenges and insights
+This was a collaborative project where we utilized (and, in some cases, implemented) various data structures to solve the problem with optimal efficiency, focusing on time complexity. I am particularly proud of the outcome, as the team demonstrated strong collaboration, and I gained valuable experience in problem analysis and algorithmic solution design. Additionally, I had the opportunity to design and implement a heap from scratch, further deepening my understanding of data structures and algorithmic development.
+
+### How to run
 - The code and the tests can be found in the 'implementación' folder, within the 'src' folder.
-- To execute the project, it is necessary to have the JDK installed on your device. You can then execute each test file (or add your own tests) and verify the system.
+- To execute the project, it is necessary to have the JDK installed on your device.
+- The tests were implemented using the JUnit5 testing framework for Java. You can execute each test file (or add your own tests) and verify the system. 
